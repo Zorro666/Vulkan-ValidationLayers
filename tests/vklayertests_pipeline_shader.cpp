@@ -3639,6 +3639,20 @@ TEST_F(VkLayerTest, PSOViewportStateTests) {
     }
 }
 
+TEST_F(VkLayerTest, VUID_VkGraphicsPipelineCreateInfo_rasterizerDiscardEnable_00751) {
+    TEST_DESCRIPTION(
+        "Test VUID-VkGraphicsPipelineCreateInfo-rasterizerDiscardEnable-00751: If the pipeline is being created with fragment "
+        "output interface state, pMultisampleState must be a valid pointer to a valid VkPipelineMultisampleStateCreateInfo "
+        "structure");
+
+    ASSERT_NO_FATAL_FAILURE(Init());
+    ASSERT_NO_FATAL_FAILURE(InitRenderTarget());
+
+    const auto null_multisamplestate = [&](CreatePipelineHelper &helper) { helper.gp_ci_.pMultisampleState = nullptr; };
+    CreatePipelineHelper::OneshotTest(*this, null_multisamplestate, kErrorBit,
+                                      "VUID-VkGraphicsPipelineCreateInfo-rasterizerDiscardEnable-00751");
+}
+
 // Set Extension dynamic states without enabling the required Extensions.
 TEST_F(VkLayerTest, ExtensionDynamicStatesSetWOExtensionEnabled) {
     TEST_DESCRIPTION("Create a graphics pipeline with Extension dynamic states without enabling the required Extensions.");
